@@ -6,210 +6,180 @@
 <title>Random 0/1</title>
 
 <style>
-:root {
-    --box-size: 35px;
-    --box-gap: 8px;
-    --box-radius: 14px;
-
-    --bg: linear-gradient(135deg, #0f172a, #020617);
-    --glass: rgba(255,255,255,0.05);
-    --primary: #22d3ee;
-    --blue: #3b82f6;
-    --pink: #ec4899;
-}
-
 body {
-    margin: 30px auto;
-    font-family: 'Segoe UI', sans-serif;
-    background: var(--bg);
+    margin: 0;
+    background: #020617;
+    font-family: sans-serif;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     height: 100vh;
+    color: white;
 }
 
-/* Container glass */
-.container {
-    backdrop-filter: blur(15px);
-    background: var(--glass);
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 25px;
+.card {
+    width: 90%;
+    max-width: 380px;
+    background: #0f172a;
     border-radius: 25px;
+    padding: 25px;
     text-align: center;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-    animation: fadeIn 0.6s ease;
+    box-shadow: 0 0 40px rgba(0,0,0,0.6);
 }
 
-@keyframes fadeIn {
-    from {opacity:0; transform: translateY(20px);}
-    to {opacity:1; transform: translateY(0);}
-}
-
-h2 {
-    color: var(--primary);
+.title {
+    font-size: 1.5rem;
+    color: #38bdf8;
     margin-bottom: 20px;
-    letter-spacing: 1px;
 }
 
-/* Slider */
-.slider {
-    width: 100%;
-    height: 6px;
-    border-radius: 10px;
-    background: rgba(255,255,255,0.2);
-    outline: none;
-}
-
-.slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary), var(--blue));
-    cursor: pointer;
-    box-shadow: 0 0 10px var(--primary);
-}
-
-.ratio-display {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-    color: #cbd5f5;
-}
-
-/* Button */
-.btn-random {
-    margin-top: 20px;
-    width: 100%;
-    padding: 14px;
+/* input */
+input {
+    width: 120px;
+    height: 65px;
+    font-size: 2.5rem;
+    text-align: center;
+    border-radius: 15px;
     border: none;
-    border-radius: 12px;
-    font-weight: bold;
-    background: linear-gradient(135deg, var(--primary), var(--blue));
-    color: #020617;
-    cursor: pointer;
-    transition: 0.25s;
-    box-shadow: 0 10px 25px rgba(34,211,238,0.3);
+    outline: none;
+    background: #020617;
+    color: #38bdf8;
+    margin: 0 auto;
+    display: block;
 }
 
-.btn-random:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 15px 35px rgba(34,211,238,0.5);
-}
-
-.btn-random:active {
-    transform: scale(0.96);
-}
-
-/* Result grid */
-.result-container {
-    margin-top: 25px;
-    display: grid;
-    grid-template-columns: repeat(6, auto);
-    gap: var(--box-gap);
+/* ô copy */
+.copy-box {
+    margin: 10px auto;
+    width: 120px;
+    height: 55px;
+    border-radius: 15px;
+    background: rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
     justify-content: center;
+    font-size: 40px;
+    letter-spacing: 3px;
+    color: #facc15;
+    border: 1px solid rgba(255,255,255,0.08);
 }
 
-/* Box */
-.result-box {
-    width: var(--box-size);
-    height: var(--box-size);
-    border-radius: var(--box-radius);
+/* grid căn giữa chuẩn */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(6, 38px);
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
     font-size: 1.4rem;
-    color: white;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    transition: 0.3s;
+    opacity: 0;
+    transform: scale(0.5);
 }
 
-/* Hiệu ứng theo số */
-.result-box.zero {
-    color: #60a5fa;
-    box-shadow: 0 0 10px rgba(96,165,250,0.6);
+.show {
+    animation: show 0.4s forwards;
 }
 
-.result-box.one {
-    color: yellow;
-    box-shadow: 0 0 10px rgba(244,114,182,0.6);
+@keyframes show {
+    to { opacity: 1; transform: scale(1); }
 }
 
-/* Animation */
-.pop {
-    animation: pop 0.25s ease;
+.num-1 {
+    color: #facc15;
+    box-shadow: 0 0 10px yellow;
 }
-@keyframes pop {
-    0% { transform: scale(0.8); }
-    100% { transform: scale(1); }
+
+.num-0 {
+    color: #38bdf8;
+    box-shadow: 0 0 10px #38bdf8;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-    <h2>✨ Random 0 / 1</h2>
+<div class="card">
+    <div class="title">⚡ Random 0 / 1</div>
 
-    <input type="range" min="0" max="6" value="3" class="slider" id="ratioSlider">
+    <input id="input" maxlength="2" inputmode="numeric" placeholder="--" autofocus>
 
-    <div class="ratio-display">
-        <span> <b id="val0">3</b>  số 0</span>
-        <span> <b id="val1">3</b>  số 1</span>
-    </div>
+    <div class="copy-box" id="copyBox">--</div>
 
-    <button class="btn-random" onclick="generateRandom()">TẠO NGẪU NHIÊN</button>
-
-    <div class="result-container">
-        <div class="result-box"></div>
-        <div class="result-box"></div>
-        <div class="result-box"></div>
-        <div class="result-box"></div>
-        <div class="result-box"></div>
-        <div class="result-box"></div>
-    </div>
+    <div class="grid" id="grid"></div>
 </div>
 
 <script>
-const slider = document.getElementById("ratioSlider");
-const val0 = document.getElementById("val0");
-const val1 = document.getElementById("val1");
-const boxes = document.querySelectorAll(".result-box");
+const rawGroups = {
+    "1,1,1,1,0,0": "76,12,45,89,01,23", 
+    "1,0,0,0,0,0": "56,34,78,11,22,90",
+    "1,1,1,0,0,0": "10,20,30,40,50,60,70",
+    "1,1,1,1,1,1": "99,88"
+};
 
-slider.oninput = function() {
-    val0.innerText = 6 - this.value;
-    val1.innerText = this.value;
+const dataMap = {};
+for (const [pattern, codes] of Object.entries(rawGroups)) {
+    const arr = pattern.split(',').map(Number);
+    codes.split(',').forEach(c => dataMap[c.trim()] = arr);
 }
 
-function generateRandom() {
-    const num1 = parseInt(slider.value);
-    const num0 = 6 - num1;
+const input = document.getElementById("input");
+const copyBox = document.getElementById("copyBox");
+const grid = document.getElementById("grid");
 
-    let pool = [];
-    for (let i = 0; i < num0; i++) pool.push(0);
-    for (let i = 0; i < num1; i++) pool.push(1);
+window.onload = () => input.focus();
 
-    for (let i = pool.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [pool[i], pool[j]] = [pool[j], pool[i]];
+function shuffle(a){
+    return a.sort(() => Math.random() - 0.5);
+}
+
+input.addEventListener("input", function(){
+    this.value = this.value.replace(/\D/g,'');
+
+    if(this.value.length === 2){
+        let val = this.value;
+
+        // hiển thị ô copy
+        copyBox.innerText = val;
+
+        // auto copy (im lặng, không thông báo)
+        navigator.clipboard.writeText(val);
+
+        // tạo kết quả
+        let pattern = dataMap[val];
+        grid.innerHTML = "";
+
+        if(pattern){
+            let result = shuffle([...pattern]);
+
+            result.forEach((n,i)=>{
+                let div = document.createElement("div");
+                div.className = "circle num-" + n;
+                div.innerText = n;
+                grid.appendChild(div);
+
+                setTimeout(()=>{
+                    div.classList.add("show");
+                }, i*100);
+            });
+        }
+
+        // xoá input
+        setTimeout(()=>{
+            input.value = "";
+            input.focus();
+        }, 300);
     }
-
-    boxes.forEach((box, i) => {
-        box.innerText = pool[i];
-
-        box.classList.remove("zero","one","pop");
-        void box.offsetWidth;
-
-        if(pool[i] === 0) box.classList.add("zero");
-        else box.classList.add("one");
-
-        box.classList.add("pop");
-    });
-}
-
-window.onload = generateRandom;
+});
 </script>
 
 </body>
