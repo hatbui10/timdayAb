@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neon Lucky Draw</title>
+    <title>Matrix lucky</title>
     <style>
-        /* Nền tối sâu thẳm với hiệu ứng hạt mờ */
         body {
-            margin: 30px;
+            padding: 30px 20px 0 20px; 
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: flex-start;
             min-height: 100vh;
             background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
             font-family: 'Courier New', Courier, monospace;
-            overflow: hidden;
+            overflow-x: hidden;
+            box-sizing: border-box;
         }
 
         .container {
@@ -24,6 +25,8 @@
             background: rgba(0, 0, 0, 0.6);
             border: 1px solid #333;
             box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 500px; 
         }
 
         h2 {
@@ -34,12 +37,12 @@
             text-shadow: 0 0 10px #00d4ff;
         }
 
-        /* 6 ô số kích thước 30x30 */
         .slot-wrapper {
             display: flex;
             gap: 10px;
             justify-content: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
         }
 
         .number-box {
@@ -54,12 +57,10 @@
             font-size: 1.2rem;
             font-weight: bold;
             color: #fff;
-            /* Hiệu ứng đổ bóng Neon */
             box-shadow: 0 0 5px #00d4ff, inset 0 0 5px #00d4ff;
             transition: all 0.2s;
         }
 
-        /* Khi quay sẽ đổi màu sang hồng neon cho lung linh */
         .rolling {
             color: #ff00de;
             border-color: #ff00de;
@@ -72,20 +73,24 @@
             100% { transform: scale(1.1) rotate(-2deg); }
         }
 
-        /* Nút bấm phong cách Cyberpunk */
+        /* Nhóm các nút bấm */
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
         button {
             background: transparent;
             color: #00d4ff;
             border: 2px solid #00d4ff;
             border-radius: 30px;
-            padding: 10px 25px;
-            font-size: 0.9rem;
+            padding: 10px 20px;
+            font-size: 0.8rem;
             font-weight: bold;
             cursor: pointer;
             text-transform: uppercase;
             transition: 0.3s;
-            position: relative;
-            overflow: hidden;
         }
 
         button:hover {
@@ -94,10 +99,23 @@
             box-shadow: 0 0 20px #00d4ff;
         }
 
+        /* Màu riêng cho nút Reset/Reload */
+        .btn-reload {
+            color: #ff00de;
+            border-color: #ff00de;
+        }
+
+        .btn-reload:hover {
+            background: #ff00de;
+            color: #fff;
+            box-shadow: 0 0 20px #ff00de;
+        }
+
         button:disabled {
             border-color: #444;
             color: #444;
             cursor: not-allowed;
+            box-shadow: none;
         }
     </style>
 </head>
@@ -115,7 +133,11 @@
         <div class="number-box" id="n6">-</div>
     </div>
 
-    <button id="drawBtn" onclick="startRandom()">Generate</button>
+    <div class="btn-group">
+        <button id="drawBtn" onclick="startRandom()">Generate</button>
+        
+        <button class="btn-reload" onclick="location.reload()">Reset</button>
+    </div>
 </div>
 
 <script>
@@ -127,8 +149,6 @@
 
         boxes.forEach((box, index) => {
             box.classList.add('rolling');
-            
-            // Mỗi ô sẽ có thời gian chạy khác nhau một chút để tạo hiệu ứng đuổi nhau
             let count = 0;
             const maxCounts = 20 + (index * 10); 
             
@@ -139,7 +159,6 @@
                 if (count >= maxCounts) {
                     clearInterval(timer);
                     box.classList.remove('rolling');
-                    // Hiệu ứng lóe sáng khi dừng
                     box.style.boxShadow = "0 0 20px #fff";
                     setTimeout(() => {
                         box.style.boxShadow = "0 0 5px #00d4ff, inset 0 0 5px #00d4ff";
