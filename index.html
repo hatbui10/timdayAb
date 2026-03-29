@@ -1,185 +1,157 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Random 0/1</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Lucky Draw</title>
+    <style>
+        /* Nền tối sâu thẳm với hiệu ứng hạt mờ */
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+        }
 
-<style>
-body {
-    margin: 30px;
-    background: #020617;
-    font-family: sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    height: 100vh;
-    color: white;
-}
+        .container {
+            text-align: center;
+            padding: 40px;
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #333;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
 
-.card {
-    width: 85%;
-    max-width: 380px;
-    background: #0f172a;
-    border-radius: 25px;
-    padding: 25px;
-    text-align: center;
-    box-shadow: 0 0 40px rgba(0,0,0,0.6);
-}
+        h2 {
+            color: #00d4ff;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px #00d4ff;
+        }
 
-.title {
-    font-size: 1.5rem;
-    color: #38bdf8;
-    margin-bottom: 20px;
-}
+        /* 6 ô số kích thước 30x30 */
+        .slot-wrapper {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
 
-/* input */
-input {
-    width: 120px;
-    height: 65px;
-    font-size: 2.5rem;
-    text-align: center;
-    border-radius: 15px;
-    border: none;
-    outline: none;
-    background: #020617;
-    color: #38bdf8;
-    margin: 0 auto;
-    display: block;
-}
+        .number-box {
+            width: 30px;
+            height: 30px;
+            background: #000;
+            border: 1px solid #00d4ff;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+            /* Hiệu ứng đổ bóng Neon */
+            box-shadow: 0 0 5px #00d4ff, inset 0 0 5px #00d4ff;
+            transition: all 0.2s;
+        }
 
-/* ô copy */
-.copy-box {
-    margin: 10px auto;
-    width: 120px;
-    height: 55px;
-    border-radius: 15px;
-    background: rgba(255,255,255,0.05);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 40px;
-    letter-spacing: 3px;
-    color: #facc15;
-    border: 1px solid rgba(255,255,255,0.08);
-}
+        /* Khi quay sẽ đổi màu sang hồng neon cho lung linh */
+        .rolling {
+            color: #ff00de;
+            border-color: #ff00de;
+            box-shadow: 0 0 15px #ff00de, inset 0 0 10px #ff00de;
+            animation: shake 0.1s infinite;
+        }
 
-/* grid căn giữa chuẩn */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(6, 38px);
-    justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
-}
+        @keyframes shake {
+            0% { transform: scale(1.1) rotate(2deg); }
+            100% { transform: scale(1.1) rotate(-2deg); }
+        }
 
-.circle {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 1.4rem;
-    opacity: 0;
-    transform: scale(0.5);
-}
+        /* Nút bấm phong cách Cyberpunk */
+        button {
+            background: transparent;
+            color: #00d4ff;
+            border: 2px solid #00d4ff;
+            border-radius: 10px;
+            padding: 10px 25px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
 
-.show {
-    animation: show 0.4s forwards;
-}
+        button:hover {
+            background: #00d4ff;
+            color: #000;
+            box-shadow: 0 0 20px #00d4ff;
+        }
 
-@keyframes show {
-    to { opacity: 1; transform: scale(1); }
-}
-
-.num-1 {
-    color: #facc15;
-    box-shadow: 0 0 10px yellow;
-}
-
-.num-0 {
-    color: #38bdf8;
-    box-shadow: 0 0 10px #38bdf8;
-}
-</style>
+        button:disabled {
+            border-color: #444;
+            color: #444;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="card">
-    <div class="title">⚡ Random 0 / 1</div>
+<div class="container">
+    <h2>LUCKY CODE</h2>
+    
+    <div class="slot-wrapper">
+        <div class="number-box" id="n1">-</div>
+        <div class="number-box" id="n2">-</div>
+        <div class="number-box" id="n3">-</div>
+        <div class="number-box" id="n4">-</div>
+        <div class="number-box" id="n5">-</div>
+        <div class="number-box" id="n6">-</div>
+    </div>
 
-    <input id="input" maxlength="2" inputmode="numeric" placeholder="--" autofocus>
-
-    <div class="copy-box" id="copyBox">--</div>
-
-    <div class="grid" id="grid"></div>
+    <button id="drawBtn" onclick="startRandom()">Generate</button>
 </div>
 
 <script>
-const rawGroups = {
-    "1,1,1,1,0,0": "76,12,45,89,01,23", 
-    "1,0,0,0,0,0": "56,34,78,11,22,90",
-    "1,1,1,0,0,0": "10,20,30,40,50,60,70",
-    "1,1,1,1,1,1": "99,88"
-};
+    function startRandom() {
+        const boxes = document.querySelectorAll('.number-box');
+        const btn = document.getElementById('drawBtn');
+        
+        btn.disabled = true;
 
-const dataMap = {};
-for (const [pattern, codes] of Object.entries(rawGroups)) {
-    const arr = pattern.split(',').map(Number);
-    codes.split(',').forEach(c => dataMap[c.trim()] = arr);
-}
+        boxes.forEach((box, index) => {
+            box.classList.add('rolling');
+            
+            // Mỗi ô sẽ có thời gian chạy khác nhau một chút để tạo hiệu ứng đuổi nhau
+            let count = 0;
+            const maxCounts = 20 + (index * 10); 
+            
+            const timer = setInterval(() => {
+                box.innerText = Math.floor(Math.random() * 10);
+                count++;
+                
+                if (count >= maxCounts) {
+                    clearInterval(timer);
+                    box.classList.remove('rolling');
+                    // Hiệu ứng lóe sáng khi dừng
+                    box.style.boxShadow = "0 0 20px #fff";
+                    setTimeout(() => {
+                        box.style.boxShadow = "0 0 5px #00d4ff, inset 0 0 5px #00d4ff";
+                    }, 300);
 
-const input = document.getElementById("input");
-const copyBox = document.getElementById("copyBox");
-const grid = document.getElementById("grid");
-
-window.onload = () => input.focus();
-
-function shuffle(a){
-    return a.sort(() => Math.random() - 0.5);
-}
-
-input.addEventListener("input", function(){
-    this.value = this.value.replace(/\D/g,'');
-
-    if(this.value.length === 2){
-        let val = this.value;
-
-        // hiển thị ô copy
-        copyBox.innerText = val;
-
-        // auto copy (im lặng, không thông báo)
-        navigator.clipboard.writeText(val);
-
-        // tạo kết quả
-        let pattern = dataMap[val];
-        grid.innerHTML = "";
-
-        if(pattern){
-            let result = shuffle([...pattern]);
-
-            result.forEach((n,i)=>{
-                let div = document.createElement("div");
-                div.className = "circle num-" + n;
-                div.innerText = n;
-                grid.appendChild(div);
-
-                setTimeout(()=>{
-                    div.classList.add("show");
-                }, i*100);
-            });
-        }
-
-        // xoá input
-        setTimeout(()=>{
-            input.value = "";
-            input.focus();
-        }, 300);
+                    if (index === boxes.length - 1) {
+                        btn.disabled = false;
+                    }
+                }
+            }, 50);
+        });
     }
-});
 </script>
 
 </body>
