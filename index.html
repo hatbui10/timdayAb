@@ -3,47 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Binary - Rounded Version</title>
+    <title>Cyber</title>
     <style>
         :root {
             --primary-color: #00ffcc;
             --bg-color: #050505;
         }
 
+        /* Chỉnh sửa Body để hộp nằm giữa và cách top 30px */
         body, html {
-            margin: 30px; padding: 0; width: 98%; height: 90%;
-            overflow: hidden; background-color: var(--bg-color);
-            display: flex; align-items: flex-start; justify-content: center;
+            margin: 0; 
+            padding: 0; 
+            width: 100%; 
+            height: 100%;
+            overflow: hidden; 
+            background-color: var(--bg-color);
+            display: flex; 
+            justify-content: center; /* Căn giữa ngang */
+            align-items: flex-start; /* Để hộp bắt đầu từ phía trên */
             font-family: 'Segoe UI', sans-serif;
         }
 
         #matrix-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
 
         .glass-box {
+            margin-top: 30px; /* Cách mép trên đúng 30px */
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 30px; /* Bo viền cả khung */
-            padding: 30px;
+            border-radius: 30px;
+            padding: 40px 60px;
             text-align: center;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            max-width: 90%; /* Đảm bảo không bị tràn trên màn hình nhỏ */
         }
 
         h2 {
             color: var(--primary-color);
             letter-spacing: 5px;
             text-shadow: 0 0 10px var(--primary-color);
+            margin-top: 0;
         }
 
         #binary-display {
             font-family: 'Courier New', monospace;
-            font-size: 4rem;
+            font-size: clamp(2rem, 10vw, 4rem); /* Co giãn font chữ thông minh */
             color: #fff;
             margin: 40px 0;
             text-shadow: 0 0 20px var(--primary-color);
         }
 
-        /* NÚT BO VIỀN LUNG LINH */
         .btn-cyber {
             background: linear-gradient(45deg, #00ffcc, #0099ff);
             color: #000;
@@ -53,7 +63,7 @@
             font-weight: bold;
             text-transform: uppercase;
             cursor: pointer;
-            border-radius: 100px; /* Bo tròn tuyệt đối */
+            border-radius: 100px;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
         }
@@ -67,6 +77,7 @@
 </head>
 <body>
     <canvas id="matrix-canvas"></canvas>
+    
     <div class="glass-box">
         <h2>CORE SYSTEM</h2>
         <div id="binary-display">01010010</div>
@@ -74,24 +85,31 @@
     </div>
 
     <script>
-        // Matrix Rain (Rút gọn)
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
         const drops = Array(Math.floor(canvas.width/16)).fill(1);
         function draw() {
             ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = "#0f2";
+            ctx.font = "15px monospace";
             drops.forEach((y, i) => {
-                ctx.fillText("01"[Math.floor(Math.random()*2)], i*16, y*16);
+                const text = Math.random() > 0.5 ? "0" : "1";
+                ctx.fillText(text, i*16, y*16);
                 if (y*16 > canvas.height && Math.random() > 0.975) drops[i] = 0;
                 drops[i]++;
             });
         }
         setInterval(draw, 50);
 
-        // Random logic
         const data = ["01010010", "10001011", "01101101", "11100101", "00101000", "10110010"];
         function triggerRandom() {
             const display = document.getElementById('binary-display');
