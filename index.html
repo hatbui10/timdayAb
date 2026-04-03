@@ -8,135 +8,133 @@
   <style>
     :root {
       --primary: #00f7ff;
-      --accent: #ff0055;
       --bg: #050510;
-      --panel: rgba(20, 20, 40, 0.8);
+      --panel: rgba(255, 255, 255, 0.05);
     }
 
     body {
       margin: 0;
       padding: 0;
-      min-height: 100vh;
+      height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      background: radial-gradient(circle at center, #1a1a3a 0%, var(--bg) 100%);
-      font-family: 'Segoe UI', 'Courier New', monospace;
+      background: var(--bg);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: #fff;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
-    /* Quy tắc: Cách mép trên 30px */
+    /* YÊU CẦU: 
+       - Cách mép trên 30px
+       - Cách 2 mép biên 3px (Sử dụng width calc và margin)
+    */
     .main-wrapper {
-      margin-top: 30px;
+      margin-top: 30px; 
+      margin-left: 3px;
+      margin-right: 3px;
+      width: calc(100% - 6px); 
       display: flex;
       flex-direction: column;
       align-items: center;
+    }
+
+    .card {
+      background: var(--panel);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      padding: 40px 20px;
+      border-radius: 20px;
+      border: 1px solid rgba(0, 247, 255, 0.2);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      max-width: 400px;
       width: 100%;
+      box-sizing: border-box;
     }
 
     h1 {
-      font-size: 1.5rem;
-      letter-spacing: 4px;
+      font-size: 1.1rem;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       color: var(--primary);
-      text-shadow: 0 0 15px var(--primary);
-      font-weight: 800;
-    }
-
-    .display-container {
-      background: var(--panel);
-      backdrop-filter: blur(15px);
-      padding: 40px;
-      border-radius: 24px;
-      border: 1px solid rgba(0, 247, 255, 0.3);
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
-      text-align: center;
-      width: 360px;
-      position: relative;
+      text-shadow: 0 0 10px var(--primary);
     }
 
     #output {
-      font-family: 'Courier New', Courier, monospace; /* Giữ độ rộng ký tự bằng nhau */
-      font-size: 52px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: clamp(30px, 10vw, 45px); /* Tự động co giãn theo màn hình */
       font-weight: bold;
-      letter-spacing: 6px;
-      margin-bottom: 35px;
-      padding: 20px;
+      letter-spacing: 2px;
+      margin-bottom: 30px;
+      padding: 20px 10px;
       background: rgba(0, 0, 0, 0.4);
       border-radius: 12px;
-      min-height: 60px;
+      min-height: 50px;
       display: flex;
       justify-content: center;
       align-items: center;
       color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      transition: all 0.1s ease;
+      border: 1px inset rgba(255,255,255,0.1);
     }
 
-    /* Hiệu ứng rung khi đang tính toán */
-    .processing {
-      animation: glitch 0.15s infinite;
-      color: var(--primary) !important;
-      filter: blur(1px);
+    /* Hiệu ứng rung mờ khi đang chạy */
+    .rolling {
+      animation: blurShake 0.1s infinite;
+      opacity: 0.8;
+      color: var(--primary);
     }
 
-    @keyframes glitch {
-      0% { transform: translate(2px, 0); }
-      25% { transform: translate(-2px, 0); }
-      50% { transform: translate(0, 1px); }
-      75% { transform: translate(0, -1px); }
-      100% { transform: translate(1px, 0); }
+    @keyframes blurShake {
+      0% { transform: translate(1px, 0); filter: blur(1px); }
+      50% { transform: translate(-1px, 0); filter: blur(2px); }
+      100% { transform: translate(0, 0); filter: blur(1px); }
     }
 
     button {
-      background: linear-gradient(135deg, #00f7ff 0%, #0077ff 100%);
+      background: var(--primary);
       color: #000;
       border: none;
-      padding: 16px 40px;
-      font-size: 18px;
-      font-weight: 900;
+      padding: 15px 35px;
+      font-size: 16px;
+      font-weight: 800;
       text-transform: uppercase;
       cursor: pointer;
-      border-radius: 12px;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      box-shadow: 0 0 20px rgba(0, 247, 255, 0.4);
+      border-radius: 50px;
+      transition: all 0.3s;
+      box-shadow: 0 0 15px var(--primary);
     }
 
     button:hover:not(:disabled) {
-      transform: translateY(-3px) scale(1.05);
-      box-shadow: 0 0 30px var(--primary);
-    }
-
-    button:active {
-      transform: scale(0.95);
+      transform: scale(1.05);
+      box-shadow: 0 0 25px var(--primary);
     }
 
     button:disabled {
-      background: #333;
-      color: #777;
+      background: #444;
+      color: #888;
       box-shadow: none;
-      cursor: wait;
+      cursor: not-allowed;
     }
 
-    .footer-info {
-      margin-top: 20px;
-      font-size: 12px;
-      opacity: 0.5;
-      letter-spacing: 1px;
+    .mode-tag {
+      margin-top: 15px;
+      font-size: 10px;
+      opacity: 0.4;
+      letter-spacing: 2px;
     }
   </style>
 </head>
 <body>
 
   <div class="main-wrapper">
-    <h1>8-BIT GENERATOR</h1>
+    <h1>Binary Generator</h1>
 
-    <div class="display-container">
-      <div id="output">00000000</div>
-      <button id="btn-roll" onclick="handleGenerate()">Roll Random</button>
-      <div class="footer-info">SEQUENCE MODE: 5-3 RATIO</div>
+    <div class="card">
+      <div id="output">0000-0000</div>
+      <button id="btn-roll" onclick="startEffect()">Randomize</button>
+      <div class="mode-tag">SYSTEM RATIO: 5-3</div>
     </div>
   </div>
 
@@ -144,70 +142,66 @@
     const outputEl = document.getElementById("output");
     const btnEl = document.getElementById("btn-roll");
 
-    // Logic chính: Đảm bảo tỷ lệ 5-3 (5 số 0 & 3 số 1 hoặc ngược lại)
-    function getFinalSequence() {
+    // Hàm định dạng chuỗi xxxxxxxx thành xxxx-xxxx
+    function formatOutput(str) {
+      return str.slice(0, 4) + "-" + str.slice(4);
+    }
+
+    // Logic 5-3 (giữ nguyên quy tắc của bạn)
+    function generateLogic() {
       let arr = [];
-      const type = Math.random() < 0.5 ? 0 : 1;
-      const zeros = type === 0 ? 5 : 3;
-      const ones = type === 0 ? 3 : 5;
+      let type = Math.random() < 0.5 ? 0 : 1;
+      let zeros = type === 0 ? 5 : 3;
+      let ones = type === 0 ? 3 : 5;
 
       for (let i = 0; i < zeros; i++) arr.push("0");
       for (let i = 0; i < ones; i++) arr.push("1");
 
-      // Shuffle Fisher-Yates
       for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
+        let j = Math.floor(Math.random() * (i + 1));
         [arr[i], arr[j]] = [arr[j], arr[i]];
       }
       return arr.join("");
     }
 
-    // Tạo chuỗi giả nhanh để làm hiệu ứng
-    function getVisualNoise() {
-      return Math.random().toString(2).substring(2, 10).padEnd(8, '0');
-    }
-
-    function handleGenerate() {
+    function startEffect() {
       btnEl.disabled = true;
-      outputEl.classList.add("processing");
-      
-      let duration = 1200; // Quay trong 1.2 giây
-      let intervalTime = 40; 
+      outputEl.classList.add("rolling");
+
+      let duration = 1500; // Tổng thời gian chạy 1.5s
       let startTime = Date.now();
 
-      const animate = () => {
-        const now = Date.now();
-        const elapsed = now - startTime;
+      const run = () => {
+        const elapsed = Date.now() - startTime;
+        
+        // Tạo số giả nhảy liên tục
+        const fake = Math.random().toString(2).substring(2, 10).padEnd(8, '0');
+        outputEl.textContent = formatOutput(fake);
 
-        outputEl.textContent = getVisualNoise();
-
-        // Hiệu ứng chậm dần (easing out)
         if (elapsed < duration) {
-          // Tăng độ trễ mỗi lần lặp để tạo cảm giác bánh xe dừng lại
-          let nextTick = intervalTime + (elapsed / duration) * 100;
-          setTimeout(animate, nextTick);
+          requestAnimationFrame(run);
         } else {
-          finalize();
+          stopEffect();
         }
       };
 
-      animate();
+      requestAnimationFrame(run);
     }
 
-    function finalize() {
-      outputEl.classList.remove("processing");
-      const result = getFinalSequence();
-      outputEl.textContent = result;
+    function stopEffect() {
+      outputEl.classList.remove("rolling");
+      const result = generateLogic();
+      outputEl.textContent = formatOutput(result);
       
-      // Hiệu ứng "Shockwave" khi dừng
-      outputEl.style.color = "var(--primary)";
-      outputEl.style.textShadow = "0 0 20px var(--primary), 0 0 40px #fff";
+      // Hiệu ứng lóe sáng khi kết thúc
+      outputEl.style.textShadow = "0 0 25px #fff";
+      outputEl.style.transform = "scale(1.1)";
       
       setTimeout(() => {
         outputEl.style.textShadow = "none";
-        outputEl.style.color = "#fff";
+        outputEl.style.transform = "scale(1)";
         btnEl.disabled = false;
-      }, 600);
+      }, 400);
     }
   </script>
 
