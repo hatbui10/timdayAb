@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>loc dãy Lớn </title>
+    <title>VN168 PRO - Dữ Liệu Lớn</title>
     <style>
         :root {
             --neon-blue: #00f3ff;
             --neon-pink: #ff00ff;
             --neon-purple: #bc13fe;
+            --neon-yellow: #fff200;
             --bg: #050508;
             --card: #0d0d12;
         }
@@ -22,10 +23,10 @@
             justify-content: center;
         }
 
-        /* Rule 3 cạnh: 30px top, 3px sides */
         .app-container {
             width: calc(100% - 6px);
-            margin: 30px 3px 0 3px;
+            max-width: 500px;
+            margin: 20px 3px 0 3px;
             background: var(--card);
             border: 1px solid #1f1f26;
             border-radius: 16px;
@@ -37,129 +38,82 @@
         .header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
             margin-bottom: 15px;
         }
 
         .logo {
-            font-size: 1.4rem;
-            font-weight: 900;
-            color: var(--neon-blue);
-            text-shadow: 0 0 10px var(--neon-blue);
-            line-height: 1;
+            font-size: 1.4rem; font-weight: 900; color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue); line-height: 1.1;
         }
 
         .counter-badge {
-            background: rgba(0, 0, 0, 0.4);
-            border: 2px solid var(--neon-purple);
-            padding: 6px 12px;
-            border-radius: 20px;
-            color: var(--neon-pink);
-            font-weight: bold;
-            font-size: 0.85rem;
-            text-align: center;
-            min-width: 100px;
+            background: rgba(0, 0, 0, 0.4); border: 2px solid var(--neon-purple);
+            padding: 5px 10px; border-radius: 12px; color: var(--neon-pink);
+            font-weight: bold; font-size: 0.8rem;
         }
 
         .upload-area {
-            background: rgba(255,255,255,0.03);
-            border: 1px dashed #333;
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 12px;
+            background: rgba(255,255,255,0.03); border: 1px dashed #444;
+            border-radius: 8px; padding: 12px; margin-bottom: 12px; text-align: center;
         }
-
-        input[type="file"] { width: 100%; font-size: 12px; color: #777; }
 
         .btn {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: none;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
+            width: 100%; padding: 12px; border-radius: 8px; border: none;
+            font-weight: bold; text-transform: uppercase; cursor: pointer;
+            font-size: 0.85rem; margin-bottom: 10px;
         }
 
-        .btn-render {
-            background: var(--neon-blue);
-            color: #000;
-            margin-bottom: 12px;
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+        .btn-render { background: var(--neon-blue); color: #000; }
+
+        .logic-row { display: flex; gap: 6px; margin-bottom: 10px; }
+
+        /* Style cho các nút chọn mức số */
+        .level-selector {
+            display: flex; gap: 5px; margin-bottom: 10px;
+        }
+        .btn-lvl {
+            flex: 1; background: #1a1a1a; color: #fff; border: 1px solid #333;
+            padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold;
+        }
+        .btn-lvl.active {
+            background: var(--neon-purple); border-color: var(--neon-pink);
+            box-shadow: 0 0 10px var(--neon-purple);
         }
 
-        /* Phần Fix vỡ Layout */
-        .logic-row {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-            align-items: stretch;
+        /* Container chứa các ô nhập tìm kiếm động */
+        .search-inputs-container {
+            display: flex; gap: 5px; margin-bottom: 10px;
         }
 
         .input-box {
-            flex: 1.5;
-            background: #000;
-            border: 1px solid #333;
-            border-radius: 8px;
-            color: #fff;
-            padding: 10px;
-            font-size: 0.9rem;
-            outline: none;
-            text-align: center;
-            min-width: 0; /* Quan trọng để flex không bị tràn */
+            flex: 1; background: #000; border: 1px solid #333;
+            border-radius: 8px; color: #fff; padding: 10px;
+            font-size: 0.9rem; text-align: center; outline: none;
         }
 
-        .btn-logic {
-            flex: 1;
-            background: transparent;
-            font-size: 0.75rem;
-            padding: 8px 4px;
-            line-height: 1.2;
-            min-width: 0;
-            text-align: center;
-        }
-
+        .btn-logic { flex: 1; background: transparent; padding: 8px 2px; font-size: 0.7rem; font-weight: bold; }
         .btn-a { border: 2px solid var(--neon-pink); color: var(--neon-pink); }
         .btn-b { border: 2px solid var(--neon-blue); color: var(--neon-blue); }
-
-        .btn-clear {
-            background: #1a1a1a;
-            color: #555;
-            font-size: 0.75rem;
-            margin-top: 5px;
-        }
+        .btn-find { border: 2px solid var(--neon-yellow); color: var(--neon-yellow); }
 
         #display {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(32px, 1fr));
-            gap: 4px;
-            background: #000;
-            padding: 10px;
-            border-radius: 8px;
-            height: 300px;
-            overflow-y: auto;
-            margin-top: 10px;
-            border: 1px solid #1a1a1a;
+            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+            gap: 5px; background: #000; padding: 10px; border-radius: 8px;
+            height: 350px; overflow-y: auto; border: 1px solid #1a1a1a;
         }
 
         .n-box {
-            aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #111;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            color: #999;
+            aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+            background: #16161a; border-radius: 4px; font-size: 0.8rem; color: #888;
         }
 
-        .hl-a { background: var(--neon-pink) !important; color: #fff; box-shadow: 0 0 8px var(--neon-pink); }
-        .hl-b { background: var(--neon-blue) !important; color: #000; box-shadow: 0 0 8px var(--neon-blue); }
+        .hl-a { background: var(--neon-pink) !important; color: white; box-shadow: 0 0 8px var(--neon-pink); }
+        .hl-b { background: var(--neon-blue) !important; color: black; box-shadow: 0 0 8px var(--neon-blue); }
+        .hl-find { background: var(--neon-yellow) !important; color: black; box-shadow: 0 0 12px var(--neon-yellow); font-weight: 900; }
+
+        .btn-clear { background: #1a1a1a; color: #444; font-size: 0.7rem; margin-top: 5px; width: 100%; border: none; padding: 5px; cursor: pointer;}
     </style>
 </head>
 <body>
@@ -167,87 +121,177 @@
 <div class="app-container">
     <div class="header">
         <div class="logo">VN168<br>PRO</div>
-        <div class="counter-badge" id="counter">Tổng cộng:<br>0 số</div>
+        <div id="counter" class="counter-badge">Tổng: 0 số</div>
     </div>
 
     <div class="upload-area">
         <input type="file" id="fInp" multiple onchange="loadFiles()">
     </div>
 
-    <button class="btn btn-render" onclick="render()">⚡ XỬ LÝ DỮ LIỆU (RENDER)</button>
+    <button class="btn btn-render" onclick="render()">⚡ RENDER DỮ LIỆU</button>
 
     <div class="logic-row">
         <input type="number" id="seq" class="input-box" placeholder="Độ dài">
-        <button class="btn btn-logic btn-a" onclick="color('A')">TÔ MÀU A (≥5)</button>
-        <button class="btn btn-logic btn-b" onclick="color('b')">TÔ MÀU B (<5)</button>
+        <button class="btn btn-logic btn-a" onclick="colorLogic('A')">TÔ DÃY A (≥5)</button>
+        <button class="btn btn-logic btn-b" onclick="colorLogic('B')">TÔ DÃY B (<5)</button>
     </div>
 
-    <button class="btn btn-clear" onclick="reset()">XÓA TẤT CẢ BỘ NHỚ</button>
+    <hr style="border: 0.5px solid #222; margin-bottom: 15px;">
+
+    <div style="font-size: 0.7rem; color: #666; margin-bottom: 5px; text-align: center;">CHỌN MỨC SỐ MUỐN TÌM</div>
+    <div class="level-selector">
+        <button class="btn-lvl active" onclick="changeLevel(1)">1 SỐ</button>
+        <button class="btn-lvl" onclick="changeLevel(2)">2 SỐ</button>
+        <button class="btn-lvl" onclick="changeLevel(3)">3 SỐ</button>
+        <button class="btn-lvl" onclick="changeLevel(4)">4 SỐ</button>
+    </div>
+
+    <div id="searchInputs" class="search-inputs-container">
+        <input type="number" class="input-box find-val" placeholder="Số 1">
+    </div>
+
+    <button class="btn btn-logic btn-find" style="width: 100%;" onclick="findNumbers()">🔍 TÌM KIẾM THEO DÃY</button>
+
+    <button class="btn-clear" onclick="resetAll()">XÓA BỘ NHỚ</button>
 
     <div id="display"></div>
 </div>
 
 <script>
-    let raw = JSON.parse(localStorage.getItem('vn168_pro_data')) || [];
+    let rawData = [];
+    let currentLevel = 1;
 
     window.onload = () => {
-        updateStatus();
-        if(raw.length > 0) render();
+        const saved = localStorage.getItem('vn168_data_v2');
+        if(saved) {
+            rawData = JSON.parse(saved);
+            updateStatus();
+            render();
+        }
     };
 
     function updateStatus() {
-        document.getElementById('counter').innerHTML = `Tổng cộng:<br>${raw.length} số`;
+        document.getElementById('counter').innerText = `Tổng: ${rawData.length} số`;
     }
 
-    async function loadFiles() {
-        const files = document.getElementById('fInp').files;
-        for (let f of files) {
-            const txt = await f.text();
-            const ns = txt.match(/\d/g);
-            if (ns) raw = raw.concat(ns);
+    // Thay đổi số lượng ô nhập
+    function changeLevel(lv) {
+        currentLevel = lv;
+        // Cập nhật UI nút
+        document.querySelectorAll('.btn-lvl').forEach((btn, idx) => {
+            btn.classList.toggle('active', idx === lv - 1);
+        });
+        
+        // Tạo các ô nhập
+        const container = document.getElementById('searchInputs');
+        container.innerHTML = '';
+        for(let i = 1; i <= lv; i++) {
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.className = 'input-box find-val';
+            input.placeholder = 'Số ' + i;
+            // Tự động nhảy ô khi nhập (tiện cho mobile)
+            input.oninput = function() { if(this.value.length >= 1 && i < lv) container.children[i].focus(); };
+            container.appendChild(input);
         }
-        localStorage.setItem('vn168_pro_data', JSON.stringify(raw));
-        updateStatus();
-        document.getElementById('fInp').value = "";
+    }
+
+    function loadFiles() {
+        const files = document.getElementById('fInp').files;
+        Array.from(files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const content = e.target.result;
+                const numbers = content.match(/\d/g); // Lấy từng chữ số lẻ
+                if(numbers) {
+                    rawData = rawData.concat(numbers);
+                    localStorage.setItem('vn168_data_v2', JSON.stringify(rawData));
+                    updateStatus();
+                    render();
+                }
+            };
+            reader.readAsText(file);
+        });
     }
 
     function render() {
-        const area = document.getElementById('display');
-        area.innerHTML = "";
-        const frag = document.createDocumentFragment();
-        raw.forEach((n, i) => {
-            const d = document.createElement('div');
-            d.className = 'n-box';
-            d.id = 'i' + i;
-            d.innerText = n;
-            frag.appendChild(d);
+        const display = document.getElementById('display');
+        display.innerHTML = "";
+        const fragment = document.createDocumentFragment();
+        rawData.forEach((num, index) => {
+            const box = document.createElement('div');
+            box.className = 'n-box';
+            box.id = 'idx-' + index;
+            box.innerText = num;
+            fragment.appendChild(box);
         });
-        area.appendChild(frag);
+        display.appendChild(fragment);
     }
 
-    function color(t) {
-        document.querySelectorAll('.n-box').forEach(e => e.classList.remove('hl-a', 'hl-b'));
-        const L = parseInt(document.getElementById('seq').value);
-        if(!L) return;
+    function clearStyles() {
+        document.querySelectorAll('.n-box').forEach(el => {
+            el.classList.remove('hl-a', 'hl-b', 'hl-find');
+        });
+    }
 
-        let s = [];
-        for(let i = 0; i <= raw.length; i++) {
-            const v = i < raw.length ? parseInt(raw[i]) : null;
-            let ok = (v !== null) && (t === 'A' ? v >= 5 : v < 5);
-            if(ok) { s.push(i); } 
+    function colorLogic(type) {
+        clearStyles();
+        const length = parseInt(document.getElementById('seq').value);
+        if(!length) return;
+        let tempStack = [];
+        for(let i = 0; i <= rawData.length; i++) {
+            const val = i < rawData.length ? parseInt(rawData[i]) : null;
+            const isMatch = (val !== null) && (type === 'A' ? val >= 5 : val < 5);
+            if(isMatch) { tempStack.push(i); } 
             else {
-                if(s.length >= L) {
-                    s.forEach(idx => document.getElementById('i'+idx).classList.add(t === 'A' ? 'hl-a' : 'hl-b'));
+                if(tempStack.length >= length) {
+                    tempStack.forEach(id => {
+                        const el = document.getElementById('idx-' + id);
+                        if(el) el.classList.add(type === 'A' ? 'hl-a' : 'hl-b');
+                    });
                 }
-                s = [];
+                tempStack = [];
             }
         }
     }
 
-    function reset() {
-        if(confirm("Xóa sạch bộ nhớ?")) {
-            raw = [];
-            localStorage.removeItem('vn168_pro_data');
+    // HÀM TÌM KIẾM DÃY SỐ (Cải tiến)
+    function findNumbers() {
+        clearStyles();
+        // Lấy các giá trị từ các ô nhập
+        const inputs = document.querySelectorAll('.find-val');
+        const targetSequence = Array.from(inputs).map(inp => inp.value.trim());
+        
+        // Kiểm tra xem đã nhập đủ chưa
+        if(targetSequence.some(v => v === "")) {
+            alert("Vui lòng nhập đủ các ô số!");
+            return;
+        }
+
+        // Duyệt qua dữ liệu để tìm chuỗi khớp
+        for (let i = 0; i <= rawData.length - targetSequence.length; i++) {
+            let match = true;
+            for (let j = 0; j < targetSequence.length; j++) {
+                if (String(rawData[i + j]) !== targetSequence[j]) {
+                    match = false;
+                    break;
+                }
+            }
+
+            // Nếu khớp, tô màu cả cụm đó
+            if (match) {
+                for (let j = 0; j < targetSequence.length; j++) {
+                    const el = document.getElementById('idx-' + (i + j));
+                    if (el) el.classList.add('hl-find');
+                }
+            }
+        }
+    }
+
+    function resetAll() {
+        if(confirm("Xóa toàn bộ dữ liệu đã lưu?")) {
+            rawData = [];
+            localStorage.removeItem('vn168_data_v2');
             document.getElementById('display').innerHTML = "";
             updateStatus();
         }
