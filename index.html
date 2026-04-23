@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phân Tích Dãy Số - Chỉ Tô Ab</title>
+    <title>Tìm dãy Ab</title>
     <style>
         :root {
             --bg: #0f0f0f;
@@ -12,7 +12,7 @@
             --primary: #bb86fc;
             --danger: #cf6679;
             --success: #03dac6;
-            --hl-ab: #ffeb3b; /* Vàng cho Ab */
+            --hl-ab: #ffeb3b; 
             --hl-aaa: #4caf50; 
             --hl-bbb: #2196f3; 
         }
@@ -46,11 +46,31 @@
         }
         #char-count { color: var(--primary); font-size: 1.3rem; font-weight: bold; }
 
+        .config-box {
+            background: #2a2a2a;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        .config-row { display: flex; justify-content: space-between; align-items: center; }
+        .config-box input {
+            width: 60px;
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid var(--primary);
+            background: #000;
+            color: #fff;
+            text-align: center;
+        }
+
         .controls {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
-            margin-bottom: 10px;
         }
 
         button {
@@ -68,13 +88,13 @@
         .btn-bbb { background: var(--hl-bbb); color: white; }
         .btn-undo { background: var(--success); }
         .btn-clear { background: var(--danger); color: white; }
-        .btn-upload { background: var(--primary); width: 100%; grid-column: span 2; margin-bottom: 5px; }
+        .btn-upload { background: var(--primary); width: 100%; grid-column: span 2; margin-bottom: 8px; }
 
         #display-area {
             background: var(--card);
             border-radius: 8px;
             padding: 10px;
-            min-height: 350px;
+            min-height: 300px;
             margin-top: 15px;
             border: 1px solid #333;
             display: flex;
@@ -93,7 +113,7 @@
             font-weight: bold;
         }
 
-        .active-ab { background-color: var(--hl-ab) !important; color: #000; box-shadow: 0 0 5px var(--hl-ab); }
+        .active-ab { background-color: var(--hl-ab) !important; color: #000; }
         .active-aaa { background-color: var(--hl-aaa) !important; color: #fff; }
         .active-bbb { background-color: var(--hl-bbb) !important; color: #fff; }
         
@@ -108,11 +128,18 @@
             Số lượng chữ số: <span id="char-count">0</span>
         </div>
 
+        <div class="config-box">
+            <div class="config-row">
+                <span>Độ dài tối thiểu dãy (n chữ số):</span>
+                <input type="number" id="minChars" value="2" min="2">
+            </div>
+        </div>
+
         <input type="file" id="fileInput" accept=".txt">
         <button class="btn-upload" onclick="document.getElementById('fileInput').click()">📁 TẢI FILE (.TXT)</button>
 
         <div class="controls">
-            <button class="btn-abab" onclick="findPattern('Ab')">Tìm Dãy Ab (Lớn-Bé)</button>
+            <button class="btn-abab" onclick="findPattern('Ab')">Tìm Dãy Xen Kẽ</button>
             <button class="btn-aaa" onclick="findPattern('AAA')">Dãy AA... (≥5)</button>
             <button class="btn-bbb" onclick="findPattern('bbb')">Dãy bb... (<5)</button>
             <button class="btn-undo" onclick="undo()">Hoàn Tác</button>
@@ -126,6 +153,7 @@
 <script>
     const displayArea = document.getElementById('display-area');
     const charCount = document.getElementById('char-count');
+    const minCharsInput = document.getElementById('minChars');
     let history = [];
 
     window.onload = () => {
@@ -168,23 +196,28 @@
         
         let regex;
         let className;
+        let minLen = parseInt(minCharsInput.value) || 2;
 
         if (patternType === 'Ab') {
-            // Chỉ tìm các cụm Ab liên tiếp: Ab, AbAb, AbAbAb...
-            regex = /(Ab)+/g;
+            // Regex tìm dãy xen kẽ AbAb... hoặc bAbA...
+            // Đảm bảo không có AA hoặc bb
+            regex = /(A(bA)*b?|b(Ab)*A?)/g;
             className = 'active-ab';
         } else if (patternType === 'AAA') {
-            regex = /A{2,}/g;
+            regex = /A+/g;
             className = 'active-aaa';
         } else if (patternType === 'bbb') {
-            regex = /b{2,}/g;
+            regex = /b+/g;
             className = 'active-bbb';
         }
 
         let match;
         while ((match = regex.exec(abstractString)) !== null) {
-            for (let i = match.index; i < regex.lastIndex; i++) {
-                if (spans[i]) spans[i].classList.add(className);
+            // Kiểm tra độ dài chuỗi khớp có thỏa mãn n chữ số không
+            if (match[0].length >= minLen) {
+                for (let i = match.index; i < regex.lastIndex; i++) {
+                    if (spans[i]) spans[i].classList.add(className);
+                }
             }
         }
     }
